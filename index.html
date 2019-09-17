@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>highchart tree demo</title>
+    <style>
+        #tree-container{
+            max-width: 500px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+<div id="tree-container"></div>
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="http://code.highcharts.com/gantt/modules/networkgraph.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script>
+    Highcharts.addEvent(
+        Highcharts.Series,
+        'afterSetOptions',
+        function (e) {
+            let colors=Highcharts.getOptions().colors;
+        }
+    );
+    Highcharts.chart('tree-container',{
+        chart:{
+            type: 'networkgraph',
+            height: '100%',
+            plotBorderWidth: 1,
+        },
+        title:{
+            text: 'Networkgraph with computer science',
+        },
+        subtitle:{
+            text: 'a highcharts demo'
+        },
+        plotOptions:{
+            networkgraph:{
+                keys: ['from', 'to'],
+                layoutAlgorithm: {
+                    enableSimulation: true,
+                    friction: -0.9
+                }
+            }
+        },
+        series:[{
+            dataLabel:{
+                enabled: true,
+                linkFormat: ''
+            },
+            id:'cs-tree',
+            name: 'series name',
+            data:[
+                ["CS", "programming language"],
+                ["CS", "software project"],
+                ["CS", "algorithm"],
+                ["CS", "internet technique"],
+                ["CS", "mathematics"],
+                ["CS", "hardware"],
+
+                ["programming language", "Java"],
+                ["programming language", "C++"],
+                ["programming language", "python"],
+
+                ["Java", "internet technique"],
+            ]
+        }]
+    });
+</script>
+</body>
+</html>
