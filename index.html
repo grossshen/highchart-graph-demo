@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>highchart tree demo</title>
     <style>
-        #tree-container{
+        #tree-container {
             max-width: 500px;
             margin: 0 auto;
         }
@@ -21,23 +21,60 @@
         Highcharts.Series,
         'afterSetOptions',
         function (e) {
-            let colors=Highcharts.getOptions().colors;
+            let colors = Highcharts.getOptions().colors;
+            i = 0;
+            nodes = {};
+
+            if (!this instanceof Highcharts.seriesTypes.networkgraph) {
+                return;
+            }
+            if (e.options.id !== 'cs-tree') {
+                return;
+            }
+            //link represents line between nodes
+            //console.log(link) // ["CS","algorithm"]
+            e.options.data.forEach(function (link) {
+                if (link[0] === 'CS') {
+                    nodes['CS'] = {
+                        id: 'CS',
+                        marker: {
+                            radius: 20
+                        }
+                    };
+                    nodes[link[1]] = {
+                        id: link[1],
+                        marker: {
+                            radius: 10,
+                        },
+                        color: colors[i++]
+                    };
+                } else if (nodes[link[0]] && nodes[link[0]].color) {
+                    nodes[link[1]] = {
+                        id: link[1],
+                        color: nodes[link[0]].color
+                    };
+                }
+            });
+
+            e.options.nodes = Object.keys(nodes).map(function (id) {
+                return nodes[id];
+            })
         }
     );
-    Highcharts.chart('tree-container',{
-        chart:{
+    Highcharts.chart('tree-container', {
+        chart: {
             type: 'networkgraph',
             height: '100%',
             plotBorderWidth: 1,
         },
-        title:{
+        title: {
             text: 'Networkgraph with computer science',
         },
-        subtitle:{
+        subtitle: {
             text: 'a highcharts demo'
         },
-        plotOptions:{
-            networkgraph:{
+        plotOptions: {
+            networkgraph: {
                 keys: ['from', 'to'],
                 layoutAlgorithm: {
                     enableSimulation: true,
@@ -45,14 +82,15 @@
                 }
             }
         },
-        series:[{
-            dataLabel:{
+        series: [{
+            dataLabel: {
                 enabled: true,
                 linkFormat: ''
             },
-            id:'cs-tree',
+            id: 'cs-tree',
             name: 'series name',
-            data:[
+            //定义data时需要按顺序，否则节点颜色不能成功渲染,核心节点先渲染
+            data: [
                 ["CS", "programming language"],
                 ["CS", "software project"],
                 ["CS", "algorithm"],
@@ -64,6 +102,7 @@
                 ["programming language", "C++"],
                 ["programming language", "python"],
 
+                ["Java","Spring Boot"],
                 ["Java", "internet technique"],
             ]
         }]
