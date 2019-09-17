@@ -48,6 +48,8 @@
                         },
                         color: colors[i++]
                     };
+                    console.log(nodes[link[1]].id);
+                    console.log(colors[i]);
                 } else if (nodes[link[0]] && nodes[link[0]].color) {
                     nodes[link[1]] = {
                         id: link[1],
@@ -89,7 +91,9 @@
             },
             id: 'cs-tree',
             name: 'series name',
-            //定义data时需要按顺序，否则节点颜色不能成功渲染,核心节点先渲染
+            //the data should be defined in order, otherwise the color and radius of nodes cannot be correctly rendered.
+            //search globally for 'e.options.data.forEach' to get the code setting color
+            //the color render can only succeed when no circle existing.
             data: [
                 ["CS", "programming language"],
                 ["CS", "software project"],
@@ -101,9 +105,12 @@
                 ["programming language", "Java"],
                 ["programming language", "C++"],
                 ["programming language", "python"],
+                ["internet technique", "protocol"],
 
-                ["Java","Spring Boot"],
-                ["Java", "internet technique"],
+                ["Java", "Spring Boot"],
+                // ["Java", "internet technique"],
+                ["protocol", "http"],
+
             ]
         }]
     });
